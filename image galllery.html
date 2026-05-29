@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image Gallery</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      background:#f4f4f4;
+      padding:20px;
+      text-align:center;
+    }
+
+    h1{
+      margin-bottom:20px;
+      color:#333;
+    }
+
+    /* Filter Buttons */
+    .buttons{
+      margin-bottom:20px;
+    }
+
+    .buttons button{
+      padding:10px 20px;
+      margin:5px;
+      border:none;
+      background:#333;
+      color:white;
+      cursor:pointer;
+      border-radius:5px;
+      transition:0.3s;
+    }
+
+    .buttons button:hover{
+      background:orange;
+    }
+
+    /* Gallery */
+    .gallery{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(250px,1fr));
+      gap:15px;
+    }
+
+    .image{
+      overflow:hidden;
+      border-radius:10px;
+      position:relative;
+    }
+
+    .image img{
+      width:100%;
+      height:250px;
+      object-fit:cover;
+      transition:0.5s;
+      cursor:pointer;
+    }
+
+    /* Hover Effect */
+    .image:hover img{
+      transform:scale(1.1);
+      filter:brightness(70%);
+    }
+
+    /* Lightbox */
+    .lightbox{
+      display:none;
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.9);
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      z-index:1000;
+    }
+
+    .lightbox img{
+      width:80%;
+      max-width:700px;
+      border-radius:10px;
+    }
+
+    .close{
+      position:absolute;
+      top:20px;
+      right:30px;
+      color:white;
+      font-size:40px;
+      cursor:pointer;
+    }
+
+    /* Navigation Buttons */
+    .prev, .next{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:40px;
+      color:white;
+      background:rgba(0,0,0,0.5);
+      border:none;
+      padding:10px 20px;
+      cursor:pointer;
+    }
+
+    .prev{
+      left:20px;
+    }
+
+    .next{
+      right:20px;
+    }
+
+    .prev:hover,
+    .next:hover{
+      background:orange;
+    }
+
+    /* Responsive */
+    @media(max-width:600px){
+      .lightbox img{
+        width:95%;
+      }
+
+      .prev, .next{
+        font-size:25px;
+        padding:8px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Simple Image Gallery</h1>
+
+  <!-- Filter Buttons -->
+  <div class="buttons">
+    <button onclick="filterImages('all')">All</button>
+    <button onclick="filterImages('nature')">Nature</button>
+    <button onclick="filterImages('cars')">Cars</button>
+  </div>
+
+  <!-- Gallery -->
+  <div class="gallery">
+
+    <div class="image nature">
+      <img src="https://picsum.photos/id/1015/600/400" alt="" onclick="openLightbox(0)">
+    </div>
+
+    <div class="image cars">
+      <img src="https://picsum.photos/id/1071/600/400" alt="" onclick="openLightbox(1)">
+    </div>
+
+    <div class="image nature">
+      <img src="https://picsum.photos/id/1025/600/400" alt="" onclick="openLightbox(2)">
+    </div>
+
+    <div class="image nature">
+      <img src="https://picsum.photos/id/1043/600/400" alt="" onclick="openLightbox(3)">
+    </div>
+
+    <div class="image cars">
+      <img src="https://img.magnific.com/premium-photo/small-compact-electric-car-navigating-city-streets-created-with-generative-ai_115122-20985.jpg" alt="" onclick="openLightbox(3)">
+    </div>
+
+    <div class="image cars">
+      <img src="https://carinsighthub.com/wp-content/uploads/2025/10/best-electric-cars-in-india-2025.png" alt="" onclick="openLightbox(3)">
+    </div>
+
+    <div class="image nature">
+      <img src="https://picsum.photos/id/1056/600/400" alt="" onclick="openLightbox(4)">
+    </div>
+
+    <div class="image nature">
+      <img src="https://picsum.photos/id/1069/600/400" alt="" onclick="openLightbox(5)">
+    </div>
+
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+
+    <span class="close" onclick="closeLightbox()">&times;</span>
+
+    <button class="prev" onclick="prevImage()">❮</button>
+
+    <img id="lightboxImage">
+
+    <button class="next" onclick="nextImage()">❯</button>
+
+  </div>
+
+  <script>
+
+    // Image Array
+    let images = document.querySelectorAll(".gallery img");
+
+    let currentIndex = 0;
+
+    // Open Lightbox
+    function openLightbox(index){
+      currentIndex = index;
+
+      document.getElementById("lightbox").style.display = "flex";
+
+      document.getElementById("lightboxImage").src =
+      images[currentIndex].src;
+    }
+
+    // Close Lightbox
+    function closeLightbox(){
+      document.getElementById("lightbox").style.display = "none";
+    }
+
+    // Next Image
+    function nextImage(){
+
+      currentIndex++;
+
+      if(currentIndex >= images.length){
+        currentIndex = 0;
+      }
+
+      document.getElementById("lightboxImage").src =
+      images[currentIndex].src;
+    }
+
+    // Previous Image
+    function prevImage(){
+
+      currentIndex--;
+
+      if(currentIndex < 0){
+        currentIndex = images.length - 1;
+      }
+
+      document.getElementById("lightboxImage").src =
+      images[currentIndex].src;
+    }
+
+    // Filter Images
+    function filterImages(category){
+
+      let items = document.querySelectorAll(".image");
+
+      items.forEach(function(item){
+
+        if(category == "all"){
+          item.style.display = "block";
+        }
+
+        else if(item.classList.contains(category)){
+          item.style.display = "block";
+        }
+
+        else{
+          item.style.display = "none";
+        }
+
+      });
+
+    }
+
+  </script>
+
+    <!-- Footer -->
+  <footer style="
+    margin-top:40px;
+    background:#333;
+    color:white;
+    padding:20px;
+    border-radius:10px;
+  ">
+
+    <h2>About Image Gallery</h2>
+
+    <p style="margin-top:10px;">
+      This is a simple responsive image gallery project made using
+      HTML, CSS and JavaScript. It includes hover effects,
+      image filters and lightbox view.
+    </p>
+
+    <hr style="margin:15px 0;">
+
+    <p>Email: manishtanwar6294@gmail.com</p>
+
+    <p style="margin-top:8px;">
+      Contact No: 9306626294
+    </p>
+
+    <p style="margin-top:15px; font-size:14px;">
+      © 2026 Image Gallery Project
+    </p>
+
+  </footer>
+
+</body>
+</html>
